@@ -1,316 +1,179 @@
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class PerceptronMain {
 
-    private static Amostra[] base;
+    static double proporcaoTreino = 0.7;
+
+    private static Amostra[] base; // Vetor com todas as amostras carregadas do arquivo
 
     /*
     * ======================================================================
-    *                  Arrays e Vetores
+    *                  Arrays e Estruturas de Dados
     * ======================================================================
      */
-    private static ArrayList<Amostra> baseUm = new ArrayList<>();
-    private static ArrayList<Amostra> baseZero = new ArrayList<>();
-    private static ArrayList<Amostra> baseTreinoUm = new ArrayList<>();
-    private static ArrayList<Amostra> baseTreinoZero = new ArrayList<>();
-    private static ArrayList<Amostra> baseTreino = new ArrayList<>();
-    private static ArrayList<Amostra> baseTeste = new ArrayList<>();
-    private static ArrayList<Amostra> baseTesteUm = new ArrayList<>();
-    private static ArrayList<Amostra> baseTesteZero = new ArrayList<>();
+    private static List<Amostra> treino = new ArrayList<>(); // Amostras de treino
+    private static List<Amostra> teste = new ArrayList<>();  // Amostras de teste
 
-    private static double[][] mediaTreino = new double[2][4];
-    private static double[][] DesvioTreino = new double[2][4];
-    private static double[][] mediaTeste = new double[2][4];
-    private static double[][] DesvioTeste = new double[2][4];
+    // Armazena as médias e desvios padrão de cada classe para cada feature
+    private static HashMap<Integer, double[]> medias = new HashMap<>();
+    private static HashMap<Integer, double[]> desvios = new HashMap<>();
+
 
     public static void main(String[] args) {
+        // Lê o arquivo de dados selecionado pelo usuário
         base = ReaderWriter.aux.readWindow();
 
-        for (int i = 0; i < base.length; i++) {
-            // Verifica Y
-            if (base[i].Y[0] == 1) {
-                baseUm.add(new Amostra(base[i].X, base[i].Y));
-            } else if (base[i].Y[0] == 0) {
-                baseZero.add(new Amostra(base[i].X, base[i].Y));
-            }
-        }
-        /*
-         * for(int i=0; i<10;i++){
-         * System.out.println(baseUm.get(i).toString());
-         * System.out.println(baseZero.get(i).toString());
-         * }
-         */
+        HashMap<Integer, List<Amostra>> basePorClasse = separarPorClasse(base); // Agrupa as amostras por classe usando HashMap
+        //1. 
+        embaralharBases(basePorClasse); // Embaralha as amostras de cada classe
+        //2.
+        dividirTreinoTeste(basePorClasse, proporcaoTreino);// Divide as amostras em treino e teste
+        //3.
+        calcularMediaDesvioPorClasse(treino, basePorClasse); // Calcula médias e desvios padrão para cada classe
 
- /*
-         * ====================================
-         * EMBARALHAR BASES
-         * ====================================
-         */
-        Collections.shuffle(baseUm);
-        Collections.shuffle(baseZero);
-        /*
-         * ==========================================
-         * DIVIDIR E ADD TREINO 70% E TESTE 30%
-         * ==========================================
-         */
-        // sublist(inicio da sublista, termino da mesma);
-        // ja foi embaralhada;
-        baseTreinoUm.addAll(baseUm.subList(0, (int) (0.7 * baseUm.size())));
-        baseTreinoZero.addAll(baseZero.subList(0, (int) (0.7 * baseZero.size())));
+        // Avaliação do modelo na base de treino
+        System.out.println("=== Avaliação na base de treino ===");
+        avaliarBase(treino, basePorClasse);
 
-        baseTesteUm.addAll(baseUm.subList((int) (0.7 * baseUm.size()), baseUm.size()));
-        baseTesteZero.addAll(baseZero.subList((int) (0.7 * baseZero.size()), baseZero.size()));
-        
-        baseTeste.addAll(baseTesteUm);
-        baseTeste.addAll(baseTesteZero);
-
-         baseTreino.addAll(baseTreinoUm);
-         baseTreino.addAll(baseTreinoZero);
-
-
-        // ====================================
-        // For de Treino
-        // ====================================
-        // Base de treino 70% da base de cada classe
-        // Não Faz ajuste dos pesos e nem calculo dos deltas
-
-        /*
-            * ====================================================
-            *  Calculo de Medias
-            * ====================================================
-         */
-        double somaUm = 0, somaZero = 0;
-        //Classe 1
-        for (int i = 0; i < 4; i++) {
-            for (int a = 0; a < baseTreinoZero.size(); a++) {
-                somaZero += baseTreinoZero.get(i).X[i];
-            }
-            mediaTreino[0][i] = somaZero / baseTreinoZero.size();
-        }
-
-        //Classe 2
-        for (int i = 0; i < 4; i++) {
-            for (int a = 0; a < baseTreinoUm.size(); a++) {
-                somaUm += baseTreinoUm.get(i).X[i];
-            }
-            mediaTreino[1][i] = somaUm / baseTreinoUm.size();
-        }
-
-        /*
-            * ====================================================
-            *  Desvio Padrao
-            * ====================================================
-         */
-
-        double somatorioUm, somatorioZero;
-
-        //Classe 1
-        for (int j = 0; j < 4; j++) { 
-            somatorioZero = 0;
-            for (int i = 0; i < baseTreinoZero.size(); i++) {
-                somatorioZero += Math.pow((baseTreinoZero.get(i).X[j] - mediaTreino[0][j]),2); //Somatorio(Xij - media0j)
-            }
-            DesvioTreino[0][j] = Math.sqrt(somatorioZero/4);
-            
-        }
-
-        //Classe 2
-        for (int j = 0; j < 4; j++) {
-            somatorioUm = 0;
-            for (int i = 0; i < baseTreinoUm.size(); i++) {
-                somatorioUm += Math.pow((baseTreinoUm.get(i).X[j] - mediaTreino[1][j]),2); //Somatorio(Xij - media0j)
-            }
-            DesvioTreino[1][j] = Math.sqrt(somatorioUm/4);
-            
-        }
-
-        ArrayList<Double> resultadosTreinoc1 = new ArrayList<>();
-        ArrayList<Double> resultadosTreinoc2 = new ArrayList<>();
-        ArrayList<Double> resultadosTreino = new ArrayList<>();
-        /*
-         * =======================================================
-         *              Gaussiano + Produtorio P(x/C1)
-         * =======================================================
-         */
-        double result1 = 0;
-        double result2 = 0;
-        double aux, r;
-        double quantC1 = baseTreinoZero.size(); //0
-        double quantC2 = baseTreinoUm.size(); //0
-
-        //Classe 1
-        for (int i = 0; i < baseTreino.size(); i++) {
-            for (int j = 0; j < 4; j++) {
-                aux = -(Math.pow(baseTreino.get(i).X[j] - mediaTreino[0][j], 2) / (2 * Math.pow(DesvioTreino[0][j], 2)));
-                r = 2 * Math.PI * DesvioTreino[0][j];
-                if(j==0){
-                    result1 = Math.exp(aux) / Math.sqrt(r);
-                }else{
-                    result1 = result1 * Math.exp(aux) / Math.sqrt(r);
-                }
-            }
-            result1 = result1 * (quantC1/(quantC1+quantC2));
-            resultadosTreinoc1.add(result1); 
-           // System.out.println(resultadosTreinoc1[i]);
-        }
-        
-        //Classe 2
-        for (int i = 0; i < baseTreino.size(); i++) {
-            for (int j = 0; j < 4; j++) {
-                aux = -(Math.pow(baseTreino.get(i).X[j] - mediaTreino[1][j], 2) / (2 * Math.pow(DesvioTreino[1][j], 2)));
-                r = 2 * Math.PI * DesvioTreino[1][j];
-                if(j==0){
-                    result2 = Math.exp(aux) / Math.sqrt(r);
-                }else{
-                    result2 = result2 * Math.exp(aux) / Math.sqrt(r);
-                }
-            }
-            result2 = result2 * (quantC1/(quantC1+quantC2));
-            resultadosTreinoc2.add(result2); 
-            //System.out.println(resultadosTreinoc2.get(i));
-
-        }
-
-        int somaErro=0;
-        int quantAmostraTreino = baseTreino.size();
-        for (int i = 0; i < baseTreino.size(); i++) {
-            //if(resultadosTreinoc1.get(i) > resultadosTreinoc2.get(i) && baseTreino.get(i).Y[0] != 0){
-            //    resultadosTreino.add(0.0);
-            //}else{
-            //    resultadosTreino.add(1.0);
-            //    somaErro++;
-            //}
-
-            if(resultadosTreinoc1.get(i) > resultadosTreinoc2.get(i) && baseTreino.get(i).Y[0] != 0){
-                somaErro++;
-            }
-            if(resultadosTreinoc2.get(i) > resultadosTreinoc1.get(i) && baseTreino.get(i).Y[0] != 1){
-                somaErro++;
-            }
-
-            //System.out.println(resultadosTreino.get(i));
-        }
-        System.out.println("Quantidade de amostras de treino: " + quantAmostraTreino + " -- Quantidade de Erros:  "+ somaErro);
-       
-       
-        // ========================================================
-        // For de Teste
-        // ========================================================
-        
-        /*
-            * ====================================================
-            *  Calculo de Medias
-            * ====================================================
-         */
-        somaUm = 0;
-        somaZero = 0;
-        //Classe 1
-        for (int i = 0; i < 4; i++) {
-            for (int a = 0; a < baseTesteZero.size(); a++) {
-                somaZero += baseTesteZero.get(i).X[i];
-            }
-            mediaTeste[0][i] = somaZero / baseTesteZero.size();
-        }
-
-        //Classe 2
-        for (int i = 0; i < 4; i++) {
-            for (int a = 0; a < baseTesteUm.size(); a++) {
-                somaUm += baseTesteUm.get(i).X[i];
-            }
-            mediaTeste[1][i] = somaUm / baseTesteUm.size();
-        }
-
-        /*
-            * ====================================================
-            *  Desvio Padrao
-            * ====================================================
-         */
-
-        somatorioUm = 0;
-        somatorioZero = 0;
-
-        //Classe 1
-        for (int j = 0; j < 4; j++) { 
-            somatorioZero = 0;
-            for (int i = 0; i < baseTesteZero.size(); i++) {
-                somatorioZero += Math.pow((baseTesteZero.get(i).X[j] - mediaTeste[0][j]),2); //Somatorio(Xij - media0j)
-            }
-            DesvioTeste[0][j] = Math.sqrt(somatorioZero/4);
-            
-        }
-
-        //Classe 2
-        for (int j = 0; j < 4; j++) {
-            somatorioUm = 0;
-            for (int i = 0; i < baseTesteUm.size(); i++) {
-                somatorioUm += Math.pow((baseTesteUm.get(i).X[j] - mediaTeste[1][j]),2); //Somatorio(Xij - media0j)
-            }
-            DesvioTeste[1][j] = Math.sqrt(somatorioUm/4);
-            
-        }
-
-        ArrayList<Double> resultadosTestec1 = new ArrayList<>();
-        ArrayList<Double> resultadosTestec2 = new ArrayList<>();
-        ArrayList<Double> resultadosTeste = new ArrayList<>();
-        /*
-         * =======================================================
-         *              Gaussiano + Produtorio P(x/C1)
-         * =======================================================
-         */
-        result1 = 0;
-        result2 = 0;
-        double quantC1t = baseTesteZero.size(); //0
-        double quantC2t = baseTesteUm.size(); //0
-
-        //Classe 1
-        for (int i = 0; i < baseTeste.size(); i++) {
-            for (int j = 0; j < 4; j++) {
-                aux = -(Math.pow(baseTeste.get(i).X[j] - mediaTeste[0][j], 2) / (2 * Math.pow(DesvioTeste[0][j], 2)));
-                r = 2 * Math.PI * DesvioTeste[0][j];
-                if(j==0){
-                    result1 = Math.exp(aux) / Math.sqrt(r);
-                }else{
-                    result1 = result1 * Math.exp(aux) / Math.sqrt(r);
-                }
-            }
-            result1 = result1 * (quantC1t/ (quantC1t+quantC2t));
-            resultadosTestec1.add(result1); 
-           // System.out.println(resultadosTreinoc1[i]);
-        }
-        
-        //Classe 2
-        for (int i = 0; i < baseTeste.size(); i++) {
-            for (int j = 0; j < 4; j++) {
-                aux = -(Math.pow(baseTeste.get(i).X[j] - mediaTeste[1][j], 2) / (2 * Math.pow(DesvioTeste[1][j], 2)));
-                r = 2 * Math.PI * DesvioTeste[1][j];
-                if(j==0){
-                    result2 = Math.exp(aux) / Math.sqrt(r);
-                }else{
-                    result2 = result2 * Math.exp(aux) / Math.sqrt(r);
-                }
-            }
-            result2 = result2 * (quantC1t/(quantC1t + quantC2t));
-            resultadosTestec2.add(result2); 
-            //System.out.println(resultadosTreinoc2.get(i));
-
-        }
-
-        somaErro=0;
-        int quantAmostraTeste = baseTeste.size();
-        for (int i = 0; i < baseTeste.size(); i++) {
-            if(resultadosTestec1.get(i) > resultadosTestec2.get(i)){
-                resultadosTeste.add(0.0);
-            }else{
-                resultadosTeste.add(1.0);
-                somaErro++;
-            }
-            //System.out.println(resultadosTreino.get(i));
-        }
-        System.out.println("Quantidade de amostras de teste: " + quantAmostraTeste + " -- Quantidade de Erros:  "+ somaErro);
+        // Avaliação do modelo na base de teste
+        System.out.println("=== Avaliação na base de teste ===");
+        avaliarBase(teste, basePorClasse);
     }
 
+    /**
+     * Agrupa as amostras em um HashMap, usando a classe como chave
+     * @param base vetor de amostras
+     * @return HashMap com chave = classe e valor = lista de amostras da classe
+     */
+    private static HashMap<Integer, List<Amostra>> separarPorClasse(Amostra[] base2) {
+        HashMap<Integer, List<Amostra>> map = new HashMap<>();
+        for(Amostra a : base){
+            //Verifica Y
+            int classe = (int)a.Y[0]; // Identifica a classe da amostra
+            map.putIfAbsent(classe, new ArrayList<>()); // Cria lista vazia se ainda não existir
+            map.get(classe).add(a); // Adiciona a amostra à lista da sua classe
+        }
+        return map;
+    }
+
+    /**
+     * Embaralha as listas de amostras de cada classe
+     * @param basePorClasse HashMap com listas de amostras por classe
+     */
+    private static void embaralharBases(HashMap<Integer, List<Amostra>> basePorClasse) {
+        for (List<Amostra> lista : basePorClasse.values()) {
+            Collections.shuffle(lista); // Embaralha aleatoriamente
+        }
+    }
+
+    /**
+     * Divide as amostras de cada classe em treino e teste
+     * @param basePorClasse HashMap com listas de amostras por classe
+     * @param proporcaoTreino proporção de amostras para treino (ex: 0.7 = 70%)
+     */
+    private static void dividirTreinoTeste(HashMap<Integer, List<Amostra>> basePorClasse, double proporcaoTreino) {
+        for (Integer classe : basePorClasse.keySet()) {
+            List<Amostra> lista = basePorClasse.get(classe);
+            int limite = (int) (lista.size() * proporcaoTreino); // Número de amostras para treino
+
+            treino.addAll(lista.subList(0, limite)); // Adiciona ao treino
+            teste.addAll(lista.subList(limite, lista.size())); // Adiciona ao teste
+        }
+    }
+
+    /**
+     * Calcula médias e desvios padrão de cada feature para cada classe
+     * @param baseTreino lista de amostras de treino
+     * @param basePorClasse HashMap com listas de amostras por classe
+     */
+    private static void calcularMediaDesvioPorClasse(List<Amostra> baseTreino, HashMap<Integer, List<Amostra>> basePorClasse) {
+        int qtdFeatures = Amostra.qtdIn; // Número de features (X)
+
+        for (Integer classe : basePorClasse.keySet()) {
+            // Coleta apenas amostras de treino da classe atual
+            List<Amostra> subset = new ArrayList<>();
+            for (Amostra a : baseTreino) if ((int) a.Y[0] == classe) subset.add(a);
+
+            double[] media = new double[qtdFeatures];
+            double[] desvio = new double[qtdFeatures];
+
+            // Calcula média e desvio para cada feature
+            for (int j = 0; j < qtdFeatures; j++) {
+                double soma = 0;
+                for (Amostra a : subset) soma += a.X[j];
+                media[j] = soma / subset.size();
+
+                double somaQuad = 0;
+                for (Amostra a : subset) somaQuad += Math.pow(a.X[j] - media[j], 2);
+                desvio[j] = Math.sqrt(somaQuad / subset.size());
+            }
+
+            medias.put(classe, media);  // Armazena média
+            desvios.put(classe, desvio); // Armazena desvio padrão
+        }
+    }
+
+    /**
+     * Avalia a acurácia do modelo em uma base (treino ou teste)
+     * @param baseAvaliar lista de amostras a serem avaliadas
+     * @param basePorClasse HashMap com listas de amostras por classe
+     */
+    private static void avaliarBase(List<Amostra> baseAvaliar, HashMap<Integer, List<Amostra>> basePorClasse) {
+        int erros = 0;
+        int total = baseAvaliar.size();
+        int qtdFeatures = Amostra.qtdIn;
+
+        // Calcula proporção de cada classe na base de treino (para P(C))
+        HashMap<Integer, Double> proporcao = new HashMap<>();
+        for (Integer classe : basePorClasse.keySet()) {
+            long count = treino.stream().filter(a -> (int) a.Y[0] == classe).count();
+            proporcao.put(classe, count / (double) treino.size());
+        }
+
+        // Para cada amostra, calcula a probabilidade de pertencer a cada classe
+        for (Amostra a : baseAvaliar) {
+            HashMap<Integer, Double> probClasse = new HashMap<>();
+
+            for (Integer classe : basePorClasse.keySet()) {
+                double prob = proporcao.get(classe); // P(C)
+
+                // Multiplica pelas probabilidades das features usando KDE
+                for (int j = 0; j < qtdFeatures; j++) {
+                    prob *= Gaussiana.distribDensidadeProbKde(a.X[j], coletarValores(treino, classe, j));
+                }
+
+                probClasse.put(classe, prob);
+            }
+
+            // Predição: classe com maior probabilidade
+            int classePrevista = probClasse.entrySet().stream()
+                    .max((e1, e2) -> Double.compare(e1.getValue(), e2.getValue()))
+                    .get().getKey();
+
+            // Conta erro se a classe prevista for diferente da real
+            if (classePrevista != (int) a.Y[0]) erros++;
+        }
+
+        System.out.println("Total amostras: " + total + " -- Erros: " + erros);
+        System.out.printf("Acurácia: %.2f%%\n", 100.0 * (total - erros) / total);
+    }
+
+    /**
+     * Coleta todos os valores de uma feature específica para uma classe
+     * @param base lista de amostras (treino)
+     * @param classe classe que queremos coletar
+     * @param indiceFeature índice da feature
+     * @return lista de valores da feature para a classe
+     */
+    private static List<Double> coletarValores(List<Amostra> base, int classe, int indiceFeature) {
+        List<Double> valores = new ArrayList<>();
+        for (Amostra a : base) {
+            if ((int) a.Y[0] == classe) valores.add(a.X[indiceFeature]);
+        }
+        return valores;
+    }
 }

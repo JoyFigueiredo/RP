@@ -9,15 +9,9 @@ import java.util.Arrays;
  * - A classe também define o número total de amostras que devem ser lidas de um arquivo.
  */
 public class Amostra {
-    
-    // Quantidade de entradas por amostra
-    static int qtdIn = 4;
-
-    // Quantidade de saídas por amostra
-    static int qtdOut = 1;
-
-    // Quantidade total de amostras esperadas (por arquivo)
-    static int amostra = 748;
+    static int qtdIn = 4;    // Número de entradas
+    static int qtdOut = 1;   // Número de saídas
+    static int amostra = 748; // Quantidade de amostras
 
     // Vetor de valores de entrada
     double[] X;
