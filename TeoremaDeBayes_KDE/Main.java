@@ -33,7 +33,7 @@ public class Main {
         //2.
         dividirTreinoTeste(basePorClasse, proporcaoTreino);// Divide as amostras em treino e teste
         //3.
-        calcularMediaDesvioPorClasse(treino, basePorClasse); // Calcula médias e desvios padrão para cada classe
+        //calcularMediaDesvioPorClasse(treino, basePorClasse); // Calcula médias e desvios padrão para cada classe
 
         // Avaliação do modelo na base de treino
         System.out.println("=== Avaliação na base de treino ===");
@@ -90,6 +90,7 @@ public class Main {
      * @param baseTreino lista de amostras de treino
      * @param basePorClasse HashMap com listas de amostras por classe
      */
+    /*
     private static void calcularMediaDesvioPorClasse(List<Amostra> baseTreino, HashMap<Integer, List<Amostra>> basePorClasse) {
         int qtdFeatures = Amostra.qtdIn; // Número de features (X)
 
@@ -116,7 +117,7 @@ public class Main {
             desvios.put(classe, desvio); // Armazena desvio padrão
         }
     }
-
+*/
     /**
      * Avalia a acurácia do modelo em uma base (treino ou teste)
      * @param baseAvaliar lista de amostras a serem avaliadas
@@ -177,5 +178,6 @@ public class Main {
         return valores;
     }
 }
+
 
 
