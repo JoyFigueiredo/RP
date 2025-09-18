@@ -49,7 +49,7 @@ public class PerceptronMain {
      * @param base vetor de amostras
      * @return HashMap com chave = classe e valor = lista de amostras da classe
      */
-    private static HashMap<Integer, List<Amostra>> separarPorClasse(Amostra[] base2) {
+    private static HashMap<Integer, List<Amostra>> separarPorClasse(Amostra[] base) {
         HashMap<Integer, List<Amostra>> map = new HashMap<>();
         for(Amostra a : base){
             //Verifica Y
@@ -177,3 +177,4 @@ public class PerceptronMain {
         return valores;
     }
 }
+
