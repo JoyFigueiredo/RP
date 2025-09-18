@@ -131,7 +131,9 @@ public class Main {
         // Calcula proporção de cada classe na base de treino (para P(C))
         HashMap<Integer, Double> proporcao = new HashMap<>();
         for (Integer classe : basePorClasse.keySet()) {
-            long count = treino.stream().filter(a -> (int) a.Y[0] == classe).count();
+            long count = treino.stream()
+                .filter(a -> (int) a.Y[0] == classe) //matem apenas os elementos cujo a.Y[0] seja igual a classe
+                .count(); // se sim conta +1
             proporcao.put(classe, count / (double) treino.size());
         }
 
@@ -160,7 +162,7 @@ public class Main {
         }
 
         System.out.println("Total amostras: " + total + " -- Erros: " + erros);
-        System.out.printf("Acurácia: %.2f%%\n", 100.0 * (total - erros) / total);
+        System.out.printf("Acurácia: %.2f%%\n", 100.0 * (total - erros) / total); //taxa de acerto
     }
 
     /**
