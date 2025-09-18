@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class PerceptronMain {
+public class Main {
 
     static double proporcaoTreino = 0.7;
 
@@ -177,4 +177,5 @@ public class PerceptronMain {
         return valores;
     }
 }
+
 
