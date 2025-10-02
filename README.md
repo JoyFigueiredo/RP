@@ -39,11 +39,12 @@ Ele utiliza **média** e **desvio padrão** para cada atributo de cada classe, a
 $$
 f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \cdot e^{-\frac{(x - \mu)^2}{2\sigma^2}}
 $$
-
+ 
 Onde:  
-x → valor da amostra  
-$$ \mu → $$ média da amostra  
-$$ \sigma → $$ = desvio padrão da amostra  
+- <code>x</code> = valor da amostra  
+- <code>&mu;</code> = média da amostra  
+- <code>&sigma;</code> = desvio padrão da amostra
+ 
 
 
 ✔️ Vantagens: rápido e simples.  
