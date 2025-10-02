@@ -42,8 +42,8 @@ $$
 
 Onde:  
 - x → valor da amostra  
-- $ \mu → $ média da amostra  
-- $ \sigma\ → $ = desvio padrão da amostra  
+- $$ \mu → $$ média da amostra  
+- $$ \sigma\ → $$ = desvio padrão da amostra  
 
 
 ✔️ Vantagens: rápido e simples.  
