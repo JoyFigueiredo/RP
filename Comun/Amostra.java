@@ -1,4 +1,4 @@
-package EstimadoresProbabilistica;
+package Comun;
 import java.util.Arrays;
 
 /**
@@ -10,15 +10,15 @@ import java.util.Arrays;
  * - A classe também define o número total de amostras que devem ser lidas de um arquivo.
  */
 public class Amostra {
-    static int qtdIn = 4;    // Número de entradas
-    static int qtdOut = 1;   // Número de saídas
-    static int amostra = 748; // Quantidade de amostras
+    public static int qtdIn = 4;    // Número de entradas
+    public static int qtdOut = 1;   // Número de saídas
+    public static int amostra = 748; // Quantidade de amostras
 
     // Vetor de valores de entrada
-    double[] X;
+    public double[] X;
 
     // Vetor de valores de saída
-    double[] Y;
+    public double[] Y;
 
     /**
      * Construtor padrão.

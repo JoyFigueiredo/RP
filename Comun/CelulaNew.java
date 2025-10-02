@@ -1,4 +1,4 @@
-package EstimadoresProbabilistica;
+package Comun;
 import java.io.File;
 
  /*===================================================================================================
