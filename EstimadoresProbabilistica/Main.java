@@ -8,7 +8,7 @@ import java.util.List;
 import Comun.ReaderWriter;
 import Comun.Amostra;
 
-public class MainGaussianoKDE {
+public class Main {
 
     static double proporcaoTreino = 0.7;
 
@@ -34,11 +34,14 @@ public class MainGaussianoKDE {
         dividirTreinoTeste(basePorClasse, proporcaoTreino);
 
         // Avaliação
-        System.out.println("=== Avaliação na base de treino ===");
+        System.out.println("=== Avaliação Usando Estimador ===");
         avaliarBase(treino, basePorClasse);
-
-        System.out.println("=== Avaliação na base de teste ===");
         avaliarBase(teste, basePorClasse);
+
+        System.out.println("\n=== Avaliação com Classificador Bayesiano ===");
+        ClassificadorBayesiano bayesiano = new ClassificadorBayesiano();
+        bayesiano.treinar(treino);
+        
     }
 
     private static HashMap<Integer, List<Amostra>> separarPorClasse(Amostra[] base) {
