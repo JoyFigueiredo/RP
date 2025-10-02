@@ -36,9 +36,9 @@ Um **estimador de densidade** é utilizado para calcular a probabilidade de um d
 O **Estimador Gaussiano** assume que os dados seguem uma **distribuição normal**.  
 Ele utiliza **média** e **desvio padrão** para cada atributo de cada classe, aplicando a função de densidade da normal:
 
-\[
+$$
 f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \cdot e^{-\frac{(x - \mu)^2}{2\sigma^2}}
-\]
+$$
 
 ✔️ Vantagens: rápido e simples.  
 ❌ Limitação: funciona bem apenas se os dados forem aproximadamente normais.  
