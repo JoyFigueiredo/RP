@@ -41,9 +41,9 @@ f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \cdot e^{-\frac{(x - \mu)^2}{2\sigma^2}}
 $$
 
 Onde:  
-- x → valor da amostra  
-- $$ \mu → $$ média da amostra  
-- $$ \sigma\ → $$ = desvio padrão da amostra  
+x → valor da amostra  
+$$ \mu → $$ média da amostra  
+$$ \sigma → $$ = desvio padrão da amostra  
 
 
 ✔️ Vantagens: rápido e simples.  
