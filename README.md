@@ -50,9 +50,9 @@ $$
 O **KDE** é um estimador **não paramétrico**, que não assume forma prévia da distribuição.  
 Ele constrói a densidade a partir de **núcleos (kernels)** suavizados sobre cada ponto de treino:
 
-\[
+$$
 \hat{f}(x) = \frac{1}{n h} \sum_{i=1}^{n} K\left(\frac{x - x_i}{h}\right)
-\]
+$$
 
 Onde:  
 - `K` é a função núcleo (por exemplo, Gaussiana).  
@@ -69,9 +69,9 @@ Um **Classificador Bayesiano** estima a probabilidade de uma amostra pertencer a
 
 #### 📍 Teorema de Bayes  
 
-\[
+$$
 P(C|X) = \frac{P(X|C) \cdot P(C)}{P(X)}
-\]
+$$
 
 - **P(C)** → Probabilidade a priori da classe (frequência no treino).  
 - **P(X|C)** → Probabilidade da amostra dado a classe (estimada com Gaussiana ou KDE).  
@@ -83,9 +83,9 @@ P(C|X) = \frac{P(X|C) \cdot P(C)}{P(X)}
 
 O **Naive Bayes** é uma simplificação que assume independência entre os atributos:  
 
-\[
+$$
 P(X|C) = \prod_{i=1}^{n} P(X_i | C)
-\]
+$$
 
 ✔️ Fácil de implementar.  
 ✔️ Funciona bem mesmo em cenários simples.  
