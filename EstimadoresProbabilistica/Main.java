@@ -39,9 +39,10 @@ public class Main {
         avaliarBase(teste, basePorClasse);
 
         System.out.println("\n=== Avaliação com Classificador Bayesiano ===");
-        ClassificadorBayesiano bayesiano = new ClassificadorBayesiano();
+        ClassificadorBayesiano bayesiano = new ClassificadorBayesiano(usarKDE);
         bayesiano.treinar(treino);
-        
+        System.out.printf("Treino: %.2f%%\n", bayesiano.avaliar(treino));
+        System.out.printf("Teste: %.2f%%\n", bayesiano.avaliar(teste));
     }
 
     private static HashMap<Integer, List<Amostra>> separarPorClasse(Amostra[] base) {

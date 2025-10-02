@@ -14,6 +14,7 @@ Olá,
     - [📌 Classificador Bayesiano](#-classificador-bayesiano)
       - [📍 Teorema de Bayes](#-teorema-de-bayes)
       - [⚙️ Naive Bayes](#️-naive-bayes)
+  - [📌 Estrutura da Base de Dados utilizada](#-estrutura-da-base-de-dados-utilizada)
   - [📌 Exemplos de Implementação](#-exemplos-de-implementação)
   - [📌 Requisitos](#-requisitos)
   - [📌 Uso](#-uso)
@@ -119,6 +120,24 @@ $$
 ✔️ Fácil de implementar.  
 ✔️ Funciona bem mesmo em cenários simples.  
 ❌ Pode perder precisão quando os atributos são fortemente correlacionados.  
+
+---
+
+## 📌 Estrutura da Base de Dados utilizada
+
+A base de dados **transfusion.data** é um conjunto de dados utilizado para prever se um doador de sangue irá doar novamente em um determinado período. Ela contém informações sobre doadores de sangue do centro de transfusão de Hsin-Chu City, Taiwan.
+
+O conjunto de dados possui **748 registros** e **5 atributos**:
+
+| Atributo    | Descrição                                                                                  |
+|-------------|--------------------------------------------------------------------------------------------|
+| **Recency (R)**   | Número de meses desde a última doação.                                                |
+| **Frequency (F)** | Número total de doações realizadas.                                                   |
+| **Monetary (M)**  | Volume total de sangue doado em centímetros cúbicos (c.c.).                          |
+| **Time (T)**      | Número de meses desde a primeira doação.                                             |
+| **Class**         | Variável alvo binária que indica se o doador fez uma doação em março de 2007 (1 = doou, 0 = não doou). |
+
+⚠️ A distribuição das classes é **desequilibrada**, com aproximadamente 76% dos doadores **não realizando a doação** em março de 2007.
 
 ---
 
