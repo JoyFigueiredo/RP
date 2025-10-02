@@ -1,3 +1,4 @@
+package EstimadoresProbabilistica;
 import java.util.Arrays;
 
 /**

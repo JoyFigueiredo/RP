@@ -1,3 +1,4 @@
+package EstimadoresProbabilistica;
 /**
  * Classe abstrata que representa uma Rede Neural Artificial (RNA) genérica.
  * 
