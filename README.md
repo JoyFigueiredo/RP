@@ -40,6 +40,12 @@ $$
 f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \cdot e^{-\frac{(x - \mu)^2}{2\sigma^2}}
 $$
 
+Onde:  
+- \(x\) = valor da amostra  
+- \(\mu\) = média da amostra  
+- \(\sigma\) = desvio padrão da amostra  
+
+
 ✔️ Vantagens: rápido e simples.  
 ❌ Limitação: funciona bem apenas se os dados forem aproximadamente normais.  
 
@@ -54,9 +60,23 @@ $$
 \hat{f}(x) = \frac{1}{n h} \sum_{i=1}^{n} K\left(\frac{x - x_i}{h}\right)
 $$
 
+Para o **kernel Gaussiano**:
+
+$$
+K(u) = \frac{1}{\sqrt{2\pi}} e^{-\frac{u^2}{2}}
+$$
+
+Logo, a densidade KDE fica: 
+
+$
+\hat{f}(x) = \frac{1}{n h \sqrt{2\pi}} \sum_{i=1}^{n} e^{-\frac{1}{2}\left(\frac{x - x_i}{h}\right)^2}
+$
+
 Onde:  
-- `K` é a função núcleo (por exemplo, Gaussiana).  
-- `h` é a largura de banda (*bandwidth*).  
+- \(n\) = número de amostras  
+- \(h\) = largura de banda (*bandwidth*)  
+- \(x_i\) = cada ponto da amostra  
+- \(K\) = função kernel 
 
 ✔️ Vantagens: captura distribuições complexas.  
 ❌ Limitação: mais custoso computacionalmente e depende da escolha de `h`.  
