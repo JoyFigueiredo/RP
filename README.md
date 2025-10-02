@@ -47,8 +47,8 @@ Onde:
  
 
 
-✔️ Vantagens: rápido e simples.  
-❌ Limitação: funciona bem apenas se os dados forem aproximadamente normais.  
+✔️ **Vantagens:** rápido e simples.  
+❌ **Limitação:** funciona bem apenas se os dados forem aproximadamente normais.  
 
 ---
 
@@ -67,26 +67,26 @@ $$
 K(u) = \frac{1}{\sqrt{2\pi}} e^{-\frac{u^2}{2}}
 $$
 
-Logo, a densidade KDE fica: 
+Logo, a densidade KDE fica:  
 
-$
+$$
 \hat{f}(x) = \frac{1}{n h \sqrt{2\pi}} \sum_{i=1}^{n} e^{-\frac{1}{2}\left(\frac{x - x_i}{h}\right)^2}
-$
+$$
 
 Onde:  
-- \(n\) = número de amostras  
-- \(h\) = largura de banda (*bandwidth*)  
-- \(x_i\) = cada ponto da amostra  
-- \(K\) = função kernel 
+- <code>n</code> = número de amostras  
+- <code>h</code> = largura de banda (*bandwidth*)  
+- <code>x<sub>i</sub></code> = cada ponto da amostra  
+- <code>K</code> = função kernel  
 
-✔️ Vantagens: captura distribuições complexas.  
-❌ Limitação: mais custoso computacionalmente e depende da escolha de `h`.  
+✔️ **Vantagens:** captura distribuições complexas.  
+❌ **Limitação:** mais custoso computacionalmente e depende da escolha de <code>h</code>.  
 
 ---
 
 ### 📌 Classificador Bayesiano  
 
-Um **Classificador Bayesiano** estima a probabilidade de uma amostra pertencer a uma classe `C` a partir dos atributos `X`, aplicando o **Teorema de Bayes**.  
+Um **Classificador Bayesiano** estima a probabilidade de uma amostra pertencer a uma classe <code>C</code> a partir dos atributos <code>X</code>, aplicando o **Teorema de Bayes**.  
 
 #### 📍 Teorema de Bayes  
 
@@ -107,6 +107,14 @@ O **Naive Bayes** é uma simplificação que assume independência entre os atri
 $$
 P(X|C) = \prod_{i=1}^{n} P(X_i | C)
 $$
+
+Logo:  
+
+$$
+P(C|X) \propto P(C) \cdot \prod_{i=1}^{n} P(X_i | C)
+$$
+
+📌 A classe escolhida é aquela que maximiza <code>P(C|X)</code>.
 
 ✔️ Fácil de implementar.  
 ✔️ Funciona bem mesmo em cenários simples.  
